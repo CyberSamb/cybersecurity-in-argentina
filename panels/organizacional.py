@@ -2,12 +2,15 @@
 panels/organizacional.py
 Panel "Organizacional": exposición de las empresas.
 Usa matplotlib (estático) en vez de Plotly porque cada año de PwC es una
-encuesta con preguntas distintas. No hay serie temporal que justifique 
-interactividad en el propio gráfico.
+encuesta con preguntas distintas -- no hay serie temporal que justifique
+interactividad en el propio gráfico. La interactividad la da el selector
+de año de Streamlit, no el chart.
 """
 
 import streamlit as st
 import matplotlib.pyplot as plt
+
+from etiquetas import etiqueta_legible
 
 
 def render(datos):
@@ -17,15 +20,17 @@ def render(datos):
         "No son comparables entre sí como serie temporal: se muestran como fotos independientes."
     )
 
-    # Selector de año: puebla las opciones directo desde los datos.
-    # Importante: "anios" se utiliza intencionalmente para evitar futuros errores con otras herramientas
+    # Selector de año: puebla las opciones directo desde los datos, así si el
+    # día de mañana se agrega un año nuevo al CSV, aparece solo sin tocar código.
     anios_disponibles = sorted(datos["periodo_año"].unique(), reverse=True)
     anio_elegido = st.selectbox("Año del informe", anios_disponibles)
 
     subset = datos[datos["periodo_año"] == anio_elegido].sort_values("valor")
 
+    etiquetas_legibles = subset["metrica"].apply(etiqueta_legible)
+
     fig, ax = plt.subplots(figsize=(9, max(3, len(subset) * 0.4)))
-    ax.barh(subset["metrica"], subset["valor"], color="#d94f4f")
+    ax.barh(etiquetas_legibles, subset["valor"], color="#d94f4f")
     ax.set_xlabel("% de organizaciones")
     ax.set_title(f"Organizaciones en Argentina — PwC Digital Trust Insights {anio_elegido}")
     ax.set_xlim(0, 100)
