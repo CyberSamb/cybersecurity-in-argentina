@@ -1,12 +1,16 @@
 """
 panels/personal.py
 Panel "Personal": exposición de la ciudadanía.
-Se utiliza Plotly para crear interactividad con las información
+Usa Plotly porque estos gráficos necesitan interactividad real (hover, zoom)
+sobre series temporales -- a diferencia del panel Organizacional, que son
+snapshots estáticos sin serie que recorrer.
 """
 
 import re
 import streamlit as st
 import plotly.express as px
+
+from panels import gap_habitos
 
 
 def _es_anio_calendario_puro(periodo: str) -> bool:
@@ -70,3 +74,6 @@ def render(datos):
     )
     st.plotly_chart(fig2, width="stretch")
     st.caption("Fuente: D'Alessio IROL / CertiSur, Encuesta de seguridad digital (series anuales, encuestas independientes entre sí).")
+
+    # --- Sección destacada: el gap de 7 años en encuestas de hábitos ---
+    gap_habitos.render(datos)
