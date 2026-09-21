@@ -66,6 +66,7 @@ def render(datos):
         color_discrete_sequence=[ROJO_AMENAZA],
     )
     fig1.update_layout(hovermode="x unified")
+    fig1.update_xaxes(tickformat="d", dtick=1)
     st.plotly_chart(fig1, width="stretch")
     st.caption("Fuente: CERT.ar, informes anuales de gestión de incidentes.")
 

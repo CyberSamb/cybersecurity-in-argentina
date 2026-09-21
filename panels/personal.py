@@ -41,6 +41,7 @@ def render(datos):
         color_discrete_sequence=[ROJO_AMENAZA],
     )
     fig1.update_layout(hovermode="x unified")
+    fig1.update_xaxes(tickformat="d", dtick=1)
     st.plotly_chart(fig1, width="stretch")
     st.caption("Fuente: UFECI, informes de gestión anuales. Ver fuente exacta por dato en la tabla de metodología.")
 
@@ -52,8 +53,13 @@ def render(datos):
     fiscal_post = datos[datos["periodo"] == "2020-2021"]["valor"].values
 
     if len(fiscal_pre) and len(fiscal_post):
-        col1, col2 = st.columns(2)
+        col1, col_flecha, col2 = st.columns([2, 0.6, 2])
         col1.metric("Abr 2019 - Mar 2020", f"{int(fiscal_pre[0]):,}".replace(",", "."))
+        with col_flecha:
+            st.markdown(
+                "<div style='text-align:center; font-size:2rem; margin-top:1.6rem; opacity:0.6;'>→</div>",
+                unsafe_allow_html=True,
+            )
         variacion = (fiscal_post[0] - fiscal_pre[0]) / fiscal_pre[0] * 100
         col2.metric(
             "Abr 2020 - Mar 2021",
@@ -75,6 +81,7 @@ def render(datos):
         labels={"periodo": "Período", "valor": "% de encuestados"},
         color_discrete_sequence=[ROJO_AMENAZA],
     )
+    fig2.update_xaxes(type="category")
     st.plotly_chart(fig2, width="stretch")
     st.caption("Fuente: D'Alessio IROL / CertiSur, Encuesta de seguridad digital (series anuales, encuestas independientes entre sí).")
 

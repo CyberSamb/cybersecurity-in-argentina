@@ -25,7 +25,7 @@ METRICAS_HABITOS = [
 
 def render(datos):
     st.markdown("---")
-    st.subheader("El silencio de 7 años")
+    st.markdown('<h2 class="titulo-gap">El silencio de 7 años</h2>', unsafe_allow_html=True)
 
     habitos = datos[datos["metrica"].isin(METRICAS_HABITOS)].sort_values("valor")
 
