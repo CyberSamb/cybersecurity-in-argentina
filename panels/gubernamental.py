@@ -11,6 +11,7 @@ import streamlit as st
 import plotly.express as px
 
 from etiquetas import etiqueta_legible
+from colors import ROJO_AMENAZA
 
 METRICAS_SECTOR = [
     "incidentes_criticos_sector_estado",
@@ -43,6 +44,7 @@ def _selector_y_barras(datos, metricas, titulo_base, key):
         orientation="h",
         title=f"{titulo_base} — {anio_elegido}",
         labels={"x": "Cantidad", "y": ""},
+        color_discrete_sequence=[ROJO_AMENAZA],
     )
     st.plotly_chart(fig, width="stretch")
     fuente = subset["fuente"].iloc[0] if len(subset) else ""
@@ -61,6 +63,7 @@ def render(datos):
         markers=True,
         title="Incidentes de ciberseguridad reportados al Estado argentino",
         labels={"periodo_año": "Año", "valor": "Incidentes reportados"},
+        color_discrete_sequence=[ROJO_AMENAZA],
     )
     fig1.update_layout(hovermode="x unified")
     st.plotly_chart(fig1, width="stretch")

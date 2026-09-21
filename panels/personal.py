@@ -11,6 +11,7 @@ import streamlit as st
 import plotly.express as px
 
 from panels import gap_habitos
+from colors import ROJO_AMENAZA
 
 
 def _es_anio_calendario_puro(periodo: str) -> bool:
@@ -37,6 +38,7 @@ def render(datos):
         markers=True,
         title="Reportes de delitos informáticos recibidos por UFECI (año calendario)",
         labels={"periodo_año": "Año", "valor": "Reportes recibidos"},
+        color_discrete_sequence=[ROJO_AMENAZA],
     )
     fig1.update_layout(hovermode="x unified")
     st.plotly_chart(fig1, width="stretch")
@@ -71,6 +73,7 @@ def render(datos):
         y="valor",
         title="% de usuarios que dice haber sido víctima de hackeo o fraude",
         labels={"periodo": "Período", "valor": "% de encuestados"},
+        color_discrete_sequence=[ROJO_AMENAZA],
     )
     st.plotly_chart(fig2, width="stretch")
     st.caption("Fuente: D'Alessio IROL / CertiSur, Encuesta de seguridad digital (series anuales, encuestas independientes entre sí).")

@@ -11,6 +11,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 from etiquetas import etiqueta_legible
+from colors import AZUL_DEFENSA
 
 
 def render(datos):
@@ -30,7 +31,7 @@ def render(datos):
     etiquetas_legibles = subset["metrica"].apply(etiqueta_legible)
 
     fig, ax = plt.subplots(figsize=(9, max(3, len(subset) * 0.4)))
-    ax.barh(etiquetas_legibles, subset["valor"], color="#d94f4f")
+    ax.barh(etiquetas_legibles, subset["valor"], color=AZUL_DEFENSA)
     ax.set_xlabel("% de organizaciones")
     ax.set_title(f"Organizaciones en Argentina — PwC Digital Trust Insights {anio_elegido}")
     ax.set_xlim(0, 100)

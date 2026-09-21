@@ -1,0 +1,9 @@
+# Tema único de la app: fondo oscuro, rojo (amenaza) como acento primario.
+# Un solo lugar para todos los colores base -- si se ajusta la paleta,
+# se cambia acá y no en cada panel.
+[theme]
+primaryColor = "#d94f4f"
+backgroundColor = "#0f0f1a"
+secondaryBackgroundColor = "#1a1a2e"
+textColor = "#eaeaea"
+font = "sans serif"
