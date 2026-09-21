@@ -1,9 +1,10 @@
 """
 panels/gubernamental.py
 Panel "Gubernamental": exposición del Estado.
-Plotly para la serie principal (hay continuidad real 2020-2024, a diferencia
-de Organizacional). El desglose por sector usa selector de año porque CERT.ar
-no reporta las mismas categorías todos los años. A tener en cuenta :)
+Plotly para la serie principal (hay continuidad real 2020-2025). Los
+desgloses (sector y severidad) son dimensiones DISTINTAS entre sí -- se
+separan en secciones propias para no graficarlas juntas como si fueran
+categorías comparables.
 """
 
 import streamlit as st
@@ -11,15 +12,48 @@ import plotly.express as px
 
 from etiquetas import etiqueta_legible
 
+METRICAS_SECTOR = [
+    "incidentes_criticos_sector_estado",
+    "incidentes_sector_finanzas",
+    "incidentes_sector_estado_gob",
+]
+
+METRICAS_SEVERIDAD = [
+    "incidentes_severidad_alta",
+    "incidentes_severidad_critica",
+    "incidentes_severidad_media",
+    "incidentes_severidad_baja",
+]
+
+
+def _selector_y_barras(datos, metricas, titulo_base, key):
+    """Reutilizada por sector y por severidad: mismo patrón, distinta lista de métricas."""
+    subset_metricas = datos[datos["metrica"].isin(metricas)]
+    anios = sorted(subset_metricas["periodo_año"].unique(), reverse=True)
+    if len(anios) == 0:
+        return
+
+    anio_elegido = st.selectbox("Año", anios, key=key)
+    subset = subset_metricas[subset_metricas["periodo_año"] == anio_elegido].sort_values("valor")
+
+    fig = px.bar(
+        subset,
+        x="valor",
+        y=subset["metrica"].apply(etiqueta_legible),
+        orientation="h",
+        title=f"{titulo_base} — {anio_elegido}",
+        labels={"x": "Cantidad", "y": ""},
+    )
+    st.plotly_chart(fig, width="stretch")
+    fuente = subset["fuente"].iloc[0] if len(subset) else ""
+    st.caption(f"Fuente: {fuente}")
+
 
 def render(datos):
     st.header("Gubernamental — exposición del Estado")
 
-    # --- Gráfico 1: serie principal, incidentes totales 2020-2024 ---
-    serie = datos[
-        datos["metrica"] == "incidentes_totales_estado"
-    ].sort_values("periodo_año")
-
+    # --- Gráfico 1: serie principal ---
+    serie = datos[datos["metrica"] == "incidentes_totales_estado"].sort_values("periodo_año")
     fig1 = px.line(
         serie,
         x="periodo_año",
@@ -30,34 +64,14 @@ def render(datos):
     )
     fig1.update_layout(hovermode="x unified")
     st.plotly_chart(fig1, width="stretch")
-    st.caption("Fuente: CERT.ar, informes de gestión anuales.")
+    st.caption("Fuente: CERT.ar, informes anuales de gestión de incidentes.")
 
-    # --- Gráfico 2: desglose por sector ---
-    # Solo existe desglose para los años en que CERT.ar lo publicó con esa
-    # granularidad (2022 y 2024, con categorías distintas entre sí).
-    desglose = datos[datos["metrica"] != "incidentes_totales_estado"]
-    anios_con_desglose = sorted(desglose["periodo_año"].unique(), reverse=True)
-
-    if len(anios_con_desglose) == 0:
-        return  # nada más que mostrar si no hay desglose cargado
-
+    # --- Gráfico 2: desglose por sector (dimensión propia) ---
     st.subheader("Desglose por sector")
-    st.caption(
-        "CERT.ar no publica las mismas categorías todos los años, "
-        "por eso el desglose se muestra año por año en vez de como serie."
-    )
-    anio_elegido = st.selectbox("Año del desglose", anios_con_desglose)
-    subset = desglose[desglose["periodo_año"] == anio_elegido].sort_values("valor")
+    st.caption("CERT.ar no publica las mismas categorías sectoriales todos los años.")
+    _selector_y_barras(datos, METRICAS_SECTOR, "Incidentes por sector", key="sector")
 
-    fig2 = px.bar(
-        subset,
-        x="valor",
-        y=subset["metrica"].apply(etiqueta_legible),
-        orientation="h",
-        title=f"Desglose de incidentes — {anio_elegido}",
-        labels={"x": "Cantidad / %", "y": ""},
-    )
-    st.plotly_chart(fig2, width="stretch")
-
-    fuente = subset["fuente"].iloc[0] if len(subset) else ""
-    st.caption(f"Fuente: {fuente}")
+    # --- Gráfico 3: desglose por severidad (dimensión distinta, no comparable con sector) ---
+    st.subheader("Desglose por severidad")
+    st.caption("Disponible solo para los años en que CERT.ar publicó esta clasificación (2023-2025).")
+    _selector_y_barras(datos, METRICAS_SEVERIDAD, "Incidentes por nivel de severidad", key="severidad")

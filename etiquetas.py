@@ -50,6 +50,10 @@ ETIQUETAS = {
     "incidentes_sector_finanzas": "Incidentes en el sector Finanzas",
     "incidentes_sector_estado_gob": "Incidentes en organismos de gobierno",
     "pct_incidentes_phishing": "Incidentes de tipo phishing",
+    "incidentes_severidad_alta": "Incidentes de severidad alta",
+    "incidentes_severidad_critica": "Incidentes de severidad crítica",
+    "incidentes_severidad_media": "Incidentes de severidad media",
+    "incidentes_severidad_baja": "Incidentes de severidad baja",
 }
 
 
