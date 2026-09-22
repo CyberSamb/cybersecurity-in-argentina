@@ -57,23 +57,25 @@ def render(datos):
         valor_pre = f"{int(fiscal_pre[0]):,}".replace(",", ".")
         valor_post = f"{int(fiscal_post[0]):,}".replace(",", ".")
 
-        st.markdown(
-            f"""
-            <div style="display:flex; align-items:center; justify-content:center; gap:2.5rem; margin:1rem 0; flex-wrap:wrap;">
-                <div style="text-align:center;">
-                    <div style="font-size:0.9rem; opacity:0.7;">Abr 2019 - Mar 2020</div>
-                    <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_pre}</div>
+        with st.container(border=True):
+            st.markdown(
+                f"""
+                <div style="display:flex; align-items:center; justify-content:center; gap:2.5rem; padding:0.5rem 0; flex-wrap:wrap;">
+                    <div style="text-align:center;">
+                        <div style="font-size:0.9rem; opacity:0.7;">Abr 2019 - Mar 2020</div>
+                        <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_pre}</div>
+                        <div style="font-size:0.95rem; visibility:hidden;">placeholder</div>
+                    </div>
+                    <div style="font-size:2rem; opacity:0.5;">→</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:0.9rem; opacity:0.7;">Abr 2020 - Mar 2021</div>
+                        <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_post}</div>
+                        <div style="color:#3dd68c; font-size:0.95rem;">↑ +{variacion:.0f}%</div>
+                    </div>
                 </div>
-                <div style="font-size:2rem; opacity:0.5;">→</div>
-                <div style="text-align:center;">
-                    <div style="font-size:0.9rem; opacity:0.7;">Abr 2020 - Mar 2021</div>
-                    <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_post}</div>
-                    <div style="color:#3dd68c; font-size:0.95rem;">↑ +{variacion:.0f}%</div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+                """,
+                unsafe_allow_html=True,
+            )
         st.caption("Período fiscal (abril a marzo), distinto del año calendario del gráfico anterior. Fuente: UFECI, Informe de gestión 2020 (ed. 2021).")
 
     # --- Gráfico 2: tasa de victimización autopercibida ---
