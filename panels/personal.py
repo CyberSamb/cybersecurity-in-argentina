@@ -53,18 +53,26 @@ def render(datos):
     fiscal_post = datos[datos["periodo"] == "2020-2021"]["valor"].values
 
     if len(fiscal_pre) and len(fiscal_post):
-        col1, col_flecha, col2 = st.columns([2, 0.6, 2])
-        col1.metric("Abr 2019 - Mar 2020", f"{int(fiscal_pre[0]):,}".replace(",", "."))
-        with col_flecha:
-            st.markdown(
-                "<div style='text-align:center; font-size:2rem; margin-top:1.6rem; opacity:0.6;'>→</div>",
-                unsafe_allow_html=True,
-            )
         variacion = (fiscal_post[0] - fiscal_pre[0]) / fiscal_pre[0] * 100
-        col2.metric(
-            "Abr 2020 - Mar 2021",
-            f"{int(fiscal_post[0]):,}".replace(",", "."),
-            delta=f"+{variacion:.0f}%",
+        valor_pre = f"{int(fiscal_pre[0]):,}".replace(",", ".")
+        valor_post = f"{int(fiscal_post[0]):,}".replace(",", ".")
+
+        st.markdown(
+            f"""
+            <div style="display:flex; align-items:center; justify-content:center; gap:2.5rem; margin:1rem 0; flex-wrap:wrap;">
+                <div style="text-align:center;">
+                    <div style="font-size:0.9rem; opacity:0.7;">Abr 2019 - Mar 2020</div>
+                    <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_pre}</div>
+                </div>
+                <div style="font-size:2rem; opacity:0.5;">→</div>
+                <div style="text-align:center;">
+                    <div style="font-size:0.9rem; opacity:0.7;">Abr 2020 - Mar 2021</div>
+                    <div style="font-size:2.6rem; font-weight:700; font-family:'Space Grotesk',sans-serif;">{valor_post}</div>
+                    <div style="color:#3dd68c; font-size:0.95rem;">↑ +{variacion:.0f}%</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
         st.caption("Período fiscal (abril a marzo), distinto del año calendario del gráfico anterior. Fuente: UFECI, Informe de gestión 2020 (ed. 2021).")
 
