@@ -1,4 +1,4 @@
-# La Ciberseguridad Invisible 👁️⃤
+# Ciberseguridad Invisible 👁️⃤
 
 ### La exposición de la que nadie habla 
 
