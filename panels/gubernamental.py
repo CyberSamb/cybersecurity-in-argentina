@@ -94,7 +94,7 @@ def render(datos):
 
     # --- Gráfico 4: desglose por tipo de incidente (otra dimensión más) ---
     st.subheader("Desglose por tipo de incidente")
-    st.caption("Disponible solo para 2023 hasta el momento — es el único informe del que se transcribió esta clasificación completa.")
+    st.caption("Disponible para 2023-2025. El desglose de 2025 es parcial: el informe original solo publicó el número exacto de dos categorías (Fraude e Intrusión).")
     _selector_y_barras(datos, METRICAS_TIPO, "Incidentes por tipo", key="tipo")
 
     # --- Punchline: el hallazgo central del panel ---

@@ -64,6 +64,7 @@ ETIQUETAS = {
     "incidentes_tipo_disponibilidad": "Disponibilidad",
     "incidentes_tipo_vulnerable": "Sistema vulnerable",
     "incidentes_tipo_obtencion_informacion": "Obtención de información",
+    "incidentes_tipo_otros": "Otros",
 
     "incidentes_tipo_phishing": "Phishing",
     "incidentes_tipo_compromiso_cuenta": "Compromiso de cuenta (robo de credenciales)",
