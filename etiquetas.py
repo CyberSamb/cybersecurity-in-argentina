@@ -54,6 +54,21 @@ ETIQUETAS = {
     "incidentes_severidad_critica": "Incidentes de severidad crítica",
     "incidentes_severidad_media": "Incidentes de severidad media",
     "incidentes_severidad_baja": "Incidentes de severidad baja",
+
+    # Gubernamental: tipo de incidente
+    "incidentes_tipo_fraude": "Fraude",
+    "incidentes_tipo_compromiso_informacion": "Compromiso de la información",
+    "incidentes_tipo_contenido_abusivo": "Contenido abusivo",
+    "incidentes_tipo_intrusion": "Intrusión",
+    "incidentes_tipo_contenido_danino": "Contenido dañino",
+    "incidentes_tipo_disponibilidad": "Disponibilidad",
+    "incidentes_tipo_vulnerable": "Sistema vulnerable",
+    "incidentes_tipo_obtencion_informacion": "Obtención de información",
+
+    "incidentes_tipo_phishing": "Phishing",
+    "incidentes_tipo_compromiso_cuenta": "Compromiso de cuenta (robo de credenciales)",
+    "incidentes_tipo_modificacion_no_autorizada": "Modificación no autorizada de información",
+    "incidentes_tipo_acceso_no_autorizado": "Acceso no autorizado a la información",
 }
 
 

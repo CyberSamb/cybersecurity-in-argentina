@@ -12,6 +12,7 @@ import plotly.express as px
 
 from panels import gap_habitos
 from colors import ROJO_AMENAZA
+from etiquetas import etiqueta_legible
 
 
 def _es_anio_calendario_puro(periodo: str) -> bool:
@@ -94,6 +95,29 @@ def render(datos):
     fig2.update_xaxes(type="category")
     st.plotly_chart(fig2, width="stretch")
     st.caption("Fuente: D'Alessio IROL / CertiSur, Encuesta de seguridad digital (series anuales, encuestas independientes entre sí).")
+
+    # --- Gráfico 3: qué te pueden vulnerar (plataformas más afectadas, 2024) ---
+    st.subheader("Qué te pueden vulnerar")
+    METRICAS_PLATAFORMA = [
+        "pct_accesos_ilegitimos_whatsapp",
+        "pct_accesos_ilegitimos_mercadopago",
+        "pct_fraude_en_linea",
+    ]
+    plataformas = datos[datos["metrica"].isin(METRICAS_PLATAFORMA)].sort_values("valor")
+    if len(plataformas):
+        fig3 = px.bar(
+            plataformas,
+            x="valor",
+            y=plataformas["metrica"].apply(etiqueta_legible),
+            orientation="h",
+            title=f"Modalidades más reportadas ({int(plataformas['periodo_año'].iloc[0])})",
+            labels={"x": "% de los casos de acceso ilegítimo / fraude", "y": ""},
+            color_discrete_sequence=[ROJO_AMENAZA],
+        )
+        st.plotly_chart(fig3, width="stretch")
+        total = datos[datos["metrica"] == "accesos_ilegitimos_total"]["valor"].values
+        contexto_total = f" Sobre un total de {int(total[0]):,}".replace(",", ".") + " accesos ilegítimos reportados." if len(total) else ""
+        st.caption(f"Fuente: {plataformas['fuente'].iloc[0]}.{contexto_total}")
 
     # --- Sección destacada: el gap de 7 años en encuestas de hábitos ---
     gap_habitos.render(datos)

@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 from etiquetas import etiqueta_legible
 from colors import AZUL_DEFENSA
+from panels import punchline
 
 
 def render(datos):
@@ -46,3 +47,11 @@ def render(datos):
 
     fuente = subset["fuente"].iloc[0] if len(subset) else ""
     st.caption(f"Fuente: {fuente}")
+
+    # --- Punchline: el hallazgo central del panel ---
+    punchline.render(
+        "77%",
+        "de las organizaciones argentinas no está preparada para la computación cuántica, "
+        "pese a que ya figura entre las cuatro amenazas para las que se sienten menos preparadas "
+        "(PwC Argentina, Digital Trust Insights 2026).",
+    )

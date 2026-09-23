@@ -12,6 +12,7 @@ import plotly.express as px
 
 from etiquetas import etiqueta_legible
 from colors import ROJO_AMENAZA
+from panels import punchline
 
 METRICAS_SECTOR = [
     "incidentes_criticos_sector_estado",
@@ -24,6 +25,17 @@ METRICAS_SEVERIDAD = [
     "incidentes_severidad_critica",
     "incidentes_severidad_media",
     "incidentes_severidad_baja",
+]
+
+METRICAS_TIPO = [
+    "incidentes_tipo_fraude",
+    "incidentes_tipo_compromiso_informacion",
+    "incidentes_tipo_contenido_abusivo",
+    "incidentes_tipo_intrusion",
+    "incidentes_tipo_contenido_danino",
+    "incidentes_tipo_disponibilidad",
+    "incidentes_tipo_vulnerable",
+    "incidentes_tipo_obtencion_informacion",
 ]
 
 
@@ -79,3 +91,20 @@ def render(datos):
     st.subheader("Desglose por severidad")
     st.caption("Disponible solo para los años en que CERT.ar publicó esta clasificación (2023-2025).")
     _selector_y_barras(datos, METRICAS_SEVERIDAD, "Incidentes por nivel de severidad", key="severidad")
+
+    # --- Gráfico 4: desglose por tipo de incidente (otra dimensión más) ---
+    st.subheader("Desglose por tipo de incidente")
+    st.caption("Disponible solo para 2023 hasta el momento — es el único informe del que se transcribió esta clasificación completa.")
+    _selector_y_barras(datos, METRICAS_TIPO, "Incidentes por tipo", key="tipo")
+
+    # --- Punchline: el hallazgo central del panel ---
+    total = datos[datos["metrica"] == "incidentes_totales_estado"].sort_values("periodo_año")
+    if len(total) >= 2:
+        primero = total.iloc[0]
+        ultimo = total.iloc[-1]
+        variacion = (ultimo["valor"] - primero["valor"]) / primero["valor"] * 100
+        punchline.render(
+            f"+{variacion:.0f}%",
+            f"más incidentes reportados al Estado argentino entre {int(primero['periodo_año'])} "
+            f"y {int(ultimo['periodo_año'])} ({int(primero['valor'])} → {int(ultimo['valor'])} casos).",
+        )
