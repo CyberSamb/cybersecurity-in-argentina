@@ -36,6 +36,23 @@ METRICAS_TIPO = [
     "incidentes_tipo_disponibilidad",
     "incidentes_tipo_vulnerable",
     "incidentes_tipo_obtencion_informacion",
+    "incidentes_tipo_otros",
+    "incidentes_tipo_phishing",
+    "incidentes_tipo_compromiso_cuenta",
+    "incidentes_tipo_modificacion_no_autorizada",
+    "incidentes_tipo_acceso_no_autorizado",
+]
+
+# Los únicos 6 tipos con dato exacto publicado en los 3 años (2023-2025) --
+# se usan como selección por default del gráfico de superposición, ya que
+# son los únicos que se pueden leer como tendencia real sin huecos.
+METRICAS_TIPO_COMPLETAS = [
+    "incidentes_tipo_fraude",
+    "incidentes_tipo_phishing",
+    "incidentes_tipo_intrusion",
+    "incidentes_tipo_modificacion_no_autorizada",
+    "incidentes_tipo_acceso_no_autorizado",
+    "incidentes_tipo_compromiso_cuenta",
 ]
 
 
@@ -66,8 +83,20 @@ def _selector_y_barras(datos, metricas, titulo_base, key):
 def render(datos):
     st.header("Gubernamental — exposición del Estado")
 
-    # --- Gráfico 1: serie principal ---
-    serie = datos[datos["metrica"] == "incidentes_totales_estado"].sort_values("periodo_año")
+    # --- Gráfico 1: serie principal, con selector de rango de años ---
+    serie_completa = datos[datos["metrica"] == "incidentes_totales_estado"].sort_values("periodo_año")
+    anio_min, anio_max = int(serie_completa["periodo_año"].min()), int(serie_completa["periodo_año"].max())
+
+    rango = st.slider(
+        "Rango de años a mostrar",
+        min_value=anio_min,
+        max_value=anio_max,
+        value=(anio_min, anio_max),
+    )
+    serie = serie_completa[
+        (serie_completa["periodo_año"] >= rango[0]) & (serie_completa["periodo_año"] <= rango[1])
+    ]
+
     fig1 = px.line(
         serie,
         x="periodo_año",
@@ -96,6 +125,44 @@ def render(datos):
     st.subheader("Desglose por tipo de incidente")
     st.caption("Disponible para 2023-2025. El desglose de 2025 es parcial: el informe original solo publicó el número exacto de dos categorías (Fraude e Intrusión).")
     _selector_y_barras(datos, METRICAS_TIPO, "Incidentes por tipo", key="tipo")
+
+    # --- Gráfico 5: superposición de tipos elegidos, como tendencia ---
+    # A diferencia del gráfico anterior (un año, todos los tipos), acá se
+    # elige uno o más tipos y se ven a lo largo del tiempo. Solo tiene
+    # sentido para los tipos con dato en más de un año -- un tipo con un
+    # solo punto no traza ninguna línea.
+    st.subheader("Comparar la evolución de tipos de incidente")
+    tipo_datos = datos[datos["metrica"].isin(METRICAS_TIPO)]
+    opciones = sorted(tipo_datos["metrica"].unique(), key=etiqueta_legible)
+    default = [m for m in METRICAS_TIPO_COMPLETAS if m in opciones]
+
+    elegidos = st.multiselect(
+        "Tipos a comparar",
+        options=opciones,
+        default=default,
+        format_func=etiqueta_legible,
+    )
+
+    if elegidos:
+        subset = tipo_datos[tipo_datos["metrica"].isin(elegidos)].sort_values("periodo_año")
+        fig5 = px.line(
+            subset,
+            x="periodo_año",
+            y="valor",
+            color=subset["metrica"].apply(etiqueta_legible),
+            markers=True,
+            title="Evolución de los tipos de incidente elegidos",
+            labels={"periodo_año": "Año", "valor": "Incidentes", "color": "Tipo"},
+        )
+        fig5.update_layout(hovermode="x unified")
+        fig5.update_xaxes(tickformat="d", dtick=1)
+        st.plotly_chart(fig5, width="stretch")
+        st.caption(
+            "Cada tipo se grafica solo para los años en que el informe original publicó ese dato exacto "
+            "-- una línea más corta no significa menos incidentes, significa que ese año no lo desglosaron."
+        )
+    else:
+        st.info("Elegí al menos un tipo para ver su evolución.")
 
     # --- Punchline: el hallazgo central del panel ---
     total = datos[datos["metrica"] == "incidentes_totales_estado"].sort_values("periodo_año")
