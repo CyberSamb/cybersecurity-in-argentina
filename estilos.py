@@ -59,6 +59,24 @@ h3 {
     margin-top: -0.3rem;
 }
 
+/* Descripción larga del proyecto: explica qué se representa y por qué,
+   con el eje inconsistencia/inseguridad/falta de concientización. Ancho
+   acotado para que se lea como párrafo, no como línea de punta a punta
+   de la pantalla. */
+.descripcion-proyecto {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.85;
+    opacity: 0.9;
+    max-width: 100%;
+    margin: 1.2rem 0 1.8rem 0;
+}
+
+.descripcion-proyecto strong {
+    color: #eaeaea;
+    font-weight: 600;
+}
+
 /* Título de la sección "El silencio de 7 años": más grande que un
    subheader normal porque es la pieza central del storytelling. Clase
    propia para no agrandar todos los demás st.subheader() de la app. */
