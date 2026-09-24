@@ -11,6 +11,7 @@ import streamlit as st
 import plotly.express as px
 
 from panels import gap_habitos
+from panels import mini_encuesta
 from colors import ROJO_AMENAZA
 from etiquetas import etiqueta_legible
 
@@ -121,3 +122,4 @@ def render(datos):
 
     # --- Sección destacada: el gap de 7 años en encuestas de hábitos ---
     gap_habitos.render(datos)
+    mini_encuesta.render(datos)
