@@ -2,6 +2,7 @@
 panels/footer.py
 Footer metodológico: fuentes, limitaciones y declaración de uso de IA.
 Se muestra siempre, en los tres niveles, al final de la página.
+
 Las fuentes se extraen directo del CSV (no se tipean a mano) para que el
 footer nunca quede desincronizado si el dataset cambia.
 """
@@ -62,4 +63,4 @@ def render(datos):
             """
         )
 
-    st.caption("La ciberseguridad invisible — Concurso Nacional de Visualización de Datos 2026, Contar con Datos ⎯ por CyberSamb")
+    st.caption("Ciberseguridad Invisible — Concurso Nacional de Visualización de Datos 2026, Contar con Datos -- por CyberSamb")

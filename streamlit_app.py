@@ -15,7 +15,7 @@ from estilos import aplicar as aplicar_estilos
 
 # Configuración general de la página (una sola vez, al principio)
 st.set_page_config(
-    page_title="La ciberseguridad invisible",
+    page_title="Ciberseguridad Invisible",
     layout="wide",
 )
 aplicar_estilos()
@@ -30,19 +30,19 @@ df = obtener_dataframe()
 
 
 # --- Header del proyecto ---
-st.title("La ciberseguridad invisible")
-st.markdown('<p class="subtitulo-principal">La exposición de la que nadie habla</p>', unsafe_allow_html=True)
+st.title("Ciberseguridad Invisible")
+st.markdown('<p class="subtitulo-principal">Una exposición de la que nadie habla</p>', unsafe_allow_html=True)
 st.markdown(
     """
     <p class="descripcion-proyecto">
     Este proyecto compara la exposición a la ciberseguridad en Argentina en tres niveles,
-    personas, organizaciones y Estado a partir de fuentes oficiales y encuestas públicas.
+    personas, organizaciones y Estado, a partir de fuentes oficiales y encuestas públicas.
     No busca solo mostrar números: busca exponer un mismo patrón que se repite en los tres
     niveles. <strong>Inconsistencia:</strong> cada informe mide con criterios distintos, lo que
-    dificulta ver el panorama completo. <strong>Inseguridad creciente:</strong> los incidentes
+    dificulta ver un panorama completo. <strong>Inseguridad creciente:</strong> los incidentes
     reportados aumentan año a año en los tres niveles. <strong>Falta de concientización:</strong>
-    en el nivel más cercano a la gente, directamente no hay datos sobre hábitos de higinene digital. 
-    ¿Estamos realmente seguros?
+    en el nivel más cercano a la gente, directamente no hay datos, Argentina lleva años sin
+    una sola encuesta nacional sobre hábitos de higiene digital. Entonces, la pregunta que debemos hacernos es... ¿Qué tan seguros estamos?
     </p>
     """,
     unsafe_allow_html=True,
